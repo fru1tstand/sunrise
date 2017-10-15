@@ -1,42 +1,109 @@
+* {
+  user-select: none;
+  box-sizing: border-box;
+}
+
 body {
   padding: 0;
   margin: 0;
   font-family: 'Nunito', sans-serif;
-  transition: background-color 60s linear;
-  background-color: #2eebff;
+  transition: background-color 5s linear;
+  background-color: #0cfffd;
 
   &.night {
     background-color: #000;
 
-    #time {
-      color: #444;
+    .datetime {
+      bottom: 48px;
+      top: auto;
+
+      #time {
+        color: #444;
+      }
+
+      #date {
+        color: #333;
+      }
     }
-    #date {
-      color: #333;
+
+    #weather {
+      opacity: 0;
     }
   }
 }
 
 .datetime {
   position: fixed;
+  top: 48px;
   left: 48px;
-  bottom: 48px;
-}
-#time {
-  font-size: 94px;
-  color: #444;
-}
-#date {
-  font-size: 36px;
-  color: #333;
-}
-.datetime > div:nth-child(2) {
-  margin-top: -24px;
+
+  #time {
+    font-size: 94px;
+    color: #444;
+  }
+
+  #date {
+    font-size: 36px;
+    color: #333;
+  }
+
+  > div:nth-child(2) {
+    margin-top: -24px;
+  }
 }
 
 #weather {
   position: fixed;
-  bottom: 48px;
   left: 48px;
+  right: 48px;
+  bottom: 48px;
+  top: 249px;
+  opacity: 0.8;
+
+  transition: opacity 5s linear;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
+.weather-card {
+  display: inline-block;
+  width: 250px;
+  margin-right: 20px;
+  vertical-align: top;
+  color: #333;
+  background-color: #FFF;
+  text-align: center;
+  padding: 10px;
+
+  .time {
+    font-size: 22px;
+  }
+
+  .temperature, .humidity {
+    display: inline-block;
+  }
+
+  .temperature {
+    &::after {
+      content: '°';
+    }
+
+    font-size: 54px;
+  }
+  .humidity {
+    &::after {
+      content: '%';
+    }
+    &::before {
+      content: ' / ';
+    }
+
+    color: #999;
+    font-size: 32px;
+  }
+
+  .weather {
+    font-size: 32px;
+    margin-top: -16px;
+  }
+}

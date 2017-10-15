@@ -1,35 +1,76 @@
+@charset "UTF-8";
+* {
+  user-select: none;
+  box-sizing: border-box; }
+
 body {
   padding: 0;
   margin: 0;
   font-family: 'Nunito', sans-serif;
-  transition: background-color 60s linear;
-  background-color: #2eebff; }
+  transition: background-color 5s linear;
+  background-color: #0cfffd; }
   body.night {
     background-color: #000; }
-    body.night #time {
-      color: #444; }
-    body.night #date {
-      color: #333; }
+    body.night .datetime {
+      bottom: 48px;
+      top: auto; }
+      body.night .datetime #time {
+        color: #444; }
+      body.night .datetime #date {
+        color: #333; }
+    body.night #weather {
+      opacity: 0; }
 
 .datetime {
   position: fixed;
-  left: 48px;
-  bottom: 48px; }
-
-#time {
-  font-size: 94px;
-  color: #444; }
-
-#date {
-  font-size: 36px;
-  color: #333; }
-
-.datetime > div:nth-child(2) {
-  margin-top: -24px; }
+  top: 48px;
+  left: 48px; }
+  .datetime #time {
+    font-size: 94px;
+    color: #444; }
+  .datetime #date {
+    font-size: 36px;
+    color: #333; }
+  .datetime > div:nth-child(2) {
+    margin-top: -24px; }
 
 #weather {
   position: fixed;
+  left: 48px;
+  right: 48px;
   bottom: 48px;
-  left: 48px; }
+  top: 249px;
+  opacity: 0.8;
+  transition: opacity 5s linear;
+  overflow: hidden;
+  white-space: nowrap; }
+
+.weather-card {
+  display: inline-block;
+  width: 250px;
+  margin-right: 20px;
+  vertical-align: top;
+  color: #333;
+  background-color: #FFF;
+  text-align: center;
+  padding: 10px; }
+  .weather-card .time {
+    font-size: 22px; }
+  .weather-card .temperature, .weather-card .humidity {
+    display: inline-block; }
+  .weather-card .temperature {
+    font-size: 54px; }
+    .weather-card .temperature::after {
+      content: '°'; }
+  .weather-card .humidity {
+    color: #999;
+    font-size: 32px; }
+    .weather-card .humidity::after {
+      content: '%'; }
+    .weather-card .humidity::before {
+      content: ' / '; }
+  .weather-card .weather {
+    font-size: 32px;
+    margin-top: -16px; }
 
 /*# sourceMappingURL=styles.css.map */

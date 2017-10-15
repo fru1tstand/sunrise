@@ -12,27 +12,45 @@
     <div id="time"></div>
     <div id="date"></div>
 </div>
-<div id="weather"></div>
+<div id="weather">
+    <div class="weather-card">
+        <div class="time">1:00 PM</div>
+        <div class="temperature">68</div><div class="humidity">100</div>
+        <div class="weather">clear sky</div>
+    </div>
+    <div class="weather-card">
 
+    </div>
+</div>
+
+<script src="keys.js"></script>
 <script>
     (function() {
         const NIGHT_CLASS_NAME = 'night';
         const WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         const MONTHS = ['January', 'February', 'March' , 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-        const DAY_START = 470; // 7:50am * 60
-        const DAY_END = 1080; // 6pm * 60
+        const DAY_START = 7 * 60 + 50; // 7:50
+        const DAY_END = 8 * 60 + 30; // 8:30
+
+        const OPEN_WEATHER_API_URL = "http://api.openweathermap.org/data/2.5/forecast?zip=98199&appid="
+            + window.openweatherkey;
 
         let timeEl = document.getElementById('time');
         let dateEl = document.getElementById('date');
+        let weatherEl = document.getElementById('weather');
+        let lastUpdate = 0;
 
-        function update() {
-            let date = new Date();
-            timeEl.innerHTML =
-                ((date.getHours() % 12 == 0) ? "12" : date.getHours() % 12)
+        function getTimeString(date) {
+            return ((date.getHours() % 12 === 0) ? "12" : date.getHours() % 12)
                 + ":"
                 + ((date.getMinutes() < 10 ? "0" : "") + date.getMinutes())
                 + " "
                 + ((date.getHours() > 11) ? "PM" : "AM");
+        }
+
+        function update() {
+            let date = new Date();
+            timeEl.innerHTML = getTimeString(date);
             dateEl.innerHTML =
                 MONTHS[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear()
                 + " - " + WEEKDAYS[date.getDay()];
@@ -49,8 +67,51 @@
             }
         }
 
+        function parseWeatherData(data) {
+            if (data === null || data.cod !== "200") {
+                console.log("Failed to fetch data, error code " + data.cod);
+                console.log(data);
+                return;
+            }
+
+            if (data.list === null || data.list.constructor !== Array) {
+                console.log("Unexpected data! Either the list didn't exist or isn't an array.");
+                return;
+            }
+
+            let weatherHtml = "";
+            data.list.forEach(function(weatherData) {
+                let date = new Date(weatherData.dt * 1000);
+                let temperatureF = Math.round(weatherData.main.temp * 9 / 5 - 459.67);
+                weatherHtml += '<div class="weather-card">';
+                    weatherHtml += '<div class="time">' + getTimeString(date) + '</div>';
+                    weatherHtml += '<div class="temperature">' + temperatureF + '</div>' +
+                        '<div class="humidity">' + weatherData.main.humidity + '</div>';
+                    weatherHtml += '<div class="weather">' + weatherData.weather[0].description + '</div>';
+                weatherHtml += '</div>';
+            });
+            weatherEl.innerHTML = weatherHtml;
+        }
+
+        function updateWeather() {
+            if ((new Date()).getTime() - lastUpdate < 1000 * 60 * 15) {
+                console.log("Can't update weather yet, API will lock us out");
+                return;
+            }
+            lastUpdate = (new Date()).getTime();
+
+            fetch(OPEN_WEATHER_API_URL).then(function(response) {
+                return response.json();
+            }).then(parseWeatherData).catch(function(err) {
+                console.log("Failed to fetch data.");
+                console.log(err);
+            });
+        }
+
         update();
-        setInterval(update, 5000);
+        updateWeather();
+        setInterval(update, 1000 * 5); // 5 seconds
+        setInterval(updateWeather, 1000 * 60 * 60 * 2); // 2 hrs
     } ());
 </script>
 
