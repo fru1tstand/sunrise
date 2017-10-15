@@ -1,0 +1,42 @@
+body {
+  padding: 0;
+  margin: 0;
+  font-family: 'Nunito', sans-serif;
+  transition: background-color 60s linear;
+  background-color: #2eebff;
+
+  &.night {
+    background-color: #000;
+
+    #time {
+      color: #444;
+    }
+    #date {
+      color: #333;
+    }
+  }
+}
+
+.datetime {
+  position: fixed;
+  left: 48px;
+  bottom: 48px;
+}
+#time {
+  font-size: 94px;
+  color: #444;
+}
+#date {
+  font-size: 36px;
+  color: #333;
+}
+.datetime > div:nth-child(2) {
+  margin-top: -24px;
+}
+
+#weather {
+  position: fixed;
+  bottom: 48px;
+  left: 48px;
+}
+

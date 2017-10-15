@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sunrise</title>
+    <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" />
+    <link href="styles.css" rel="stylesheet" />
+</head>
+<body class="night">
+
+<div class="datetime">
+    <div id="time"></div>
+    <div id="date"></div>
+</div>
+<div id="weather"></div>
+
+<script>
+    (function() {
+        const NIGHT_CLASS_NAME = 'night';
+        const WEEKDAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const MONTHS = ['January', 'February', 'March' , 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        const DAY_START = 470; // 7:50am * 60
+        const DAY_END = 1080; // 6pm * 60
+
+        let timeEl = document.getElementById('time');
+        let dateEl = document.getElementById('date');
+
+        function update() {
+            let date = new Date();
+            timeEl.innerHTML =
+                ((date.getHours() % 12 == 0) ? "12" : date.getHours() % 12)
+                + ":"
+                + ((date.getMinutes() < 10 ? "0" : "") + date.getMinutes())
+                + " "
+                + ((date.getHours() > 11) ? "PM" : "AM");
+            dateEl.innerHTML =
+                MONTHS[date.getMonth()] + " " + date.getDate() + ", " + date.getFullYear()
+                + " - " + WEEKDAYS[date.getDay()];
+
+            let currentMinuteInDay = date.getHours() * 60 + date.getMinutes();
+            if (currentMinuteInDay > DAY_START && currentMinuteInDay < DAY_END) {
+                if (document.body.classList.contains(NIGHT_CLASS_NAME)) {
+                    document.body.classList.remove(NIGHT_CLASS_NAME);
+                }
+            } else {
+                if (!document.body.classList.contains(NIGHT_CLASS_NAME)) {
+                    document.body.classList.add(NIGHT_CLASS_NAME);
+                }
+            }
+        }
+
+        update();
+        setInterval(update, 5000);
+    } ());
+</script>
+
+</body>
+</html>
